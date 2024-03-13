@@ -1,4 +1,5 @@
 ﻿using HotelFinder.Business.Abstract;
+using HotelFinder.DataAccess;
 using HotelFinder.DataAccess.Abstract;
 using HotelFinder.DataAccess.Concrete;
 using HotelFinder.Entities;
@@ -12,45 +13,52 @@ namespace HotelFinder.Business.Concrete
 {
     public class HotelManager : IHotelService
     {
-        private IHotelRepository _hotelRepository;
-
-        public HotelManager(IHotelRepository hotelRepository)
-        {
+        private readonly IHotelRepository _hotelRepository;
+        public HotelManager(IHotelRepository hotelRepository) 
+        { 
             _hotelRepository = hotelRepository;
 
         }
-        public async Task<Hotel> CreateHotel(Hotel hotel)
+
+        public IEnumerable<Hotel> TGetByName(string name)
         {
-            return await _hotelRepository.CreateHotel(hotel);
+            return _hotelRepository.GetByName(name);
         }
 
-        public async Task DeleteHotelById(int id)
+        public void TDelete(int id)
         {
-            await _hotelRepository.DeleteHotelById(id);
+            _hotelRepository.Delete(id);
         }
 
-        public async Task<Hotel> GetHotelById(int id)
+        public IEnumerable<Hotel> TGetAll()
         {
-            if (id > 0) 
+             return  _hotelRepository.GetAll();
+        }
+
+        public Hotel TGetById(int id)
+        {
+            if (id > 0)
             {
-                 return await _hotelRepository.GetHotelById(id);
+                return _hotelRepository.GetById(id);
+
             }
             throw new Exception("id can not be less than 1");
+             
         }
 
-        public async Task<Hotel> GetHotelByName(string name)
+        public void TInsert(Hotel entity)
         {
-            return await _hotelRepository.GetHotelByName(name);
+             _hotelRepository.Insert(entity);
         }
 
-        public async Task<List<Hotel>> GetHotels()
-        {
-            return await _hotelRepository.GetHotels();
+        public void TUpdate(Hotel entity)
+        {    
+            _hotelRepository.Update(entity);
         }
 
-        public async Task<Hotel> UpdateHotel(Hotel hotel)
+        Hotel IRepositoryServices<Hotel>.TInsert(Hotel entity)
         {
-            return await _hotelRepository.UpdateHotel(hotel);
+            throw new NotImplementedException();
         }
     }
 }

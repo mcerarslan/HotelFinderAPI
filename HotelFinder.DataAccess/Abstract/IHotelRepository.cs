@@ -1,4 +1,5 @@
-﻿using HotelFinder.Entities;
+﻿using HotelFinder.DataAccess.Concrete;
+using HotelFinder.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,18 +8,8 @@ using System.Threading.Tasks;
 
 namespace HotelFinder.DataAccess.Abstract
 {
-    public interface IHotelRepository
+    public interface IHotelRepository: IRepository<Hotel>
     {
-        Task<List<Hotel>> GetHotels();
-
-        Task<Hotel> GetHotelById(int id);
-
-        Task<Hotel> GetHotelByName(string name);
-
-        Task<Hotel> CreateHotel(Hotel hotel);
-
-        Task<Hotel> UpdateHotel(Hotel hotel);
-
-        Task DeleteHotelById(int id);
+        IEnumerable<Hotel> GetByName(string name);
     }
 }

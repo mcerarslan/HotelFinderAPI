@@ -7,15 +7,8 @@ using System.Threading.Tasks;
 
 namespace HotelFinder.Business.Abstract
 {
-    public interface IHotelService
+    public interface IHotelService : IRepositoryServices<Hotel>
     {
-        Task<List<Hotel>> GetHotels();
-
-        Task<Hotel> GetHotelById(int id);
-
-        Task<Hotel> GetHotelByName(string name);
-        Task<Hotel> CreateHotel(Hotel hotel);
-        Task<Hotel> UpdateHotel(Hotel hotel);
-        Task DeleteHotelById(int id);
+        IEnumerable<Hotel> TGetByName(string name);
     }
 }

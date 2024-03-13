@@ -10,24 +10,24 @@ namespace HotelFinder.API.Controllers
     [ApiController]
     public class HotelsController : ControllerBase
     {
-        private IHotelService _hotelService;
+        private readonly IHotelService _hotelService;
         public HotelsController(IHotelService hotelService)
         {
             _hotelService = hotelService;
         }
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public  IActionResult GetHotels()
         {
-            var hotels = await _hotelService.GetHotels();
+            var hotels =  _hotelService.TGetAll();
             return Ok(hotels);
 
         }
 
         [HttpGet]
         [Route("[action]/{id}")]
-        public async Task<IActionResult> GetHotelById(int id)
+        public IActionResult GetHotelById(int id)
         {   
-            var hotel = await  _hotelService.GetHotelById(id);
+            var hotel =  _hotelService.TGetById(id);
             if (hotel != null) 
             {
                 return Ok(hotel);
@@ -36,47 +36,54 @@ namespace HotelFinder.API.Controllers
             return NotFound();
 
         }
+
         [HttpGet]
         [Route("[action]/{name}")]
-        public async Task<IActionResult> GetHotelByName(string name)
+        public  IActionResult GetHotelByName(string name)
         {
-            var hotel = await _hotelService.GetHotelByName(name);
+            var hotel = _hotelService.TGetByName(name);
             if(hotel != null)
             {
                 return Ok(hotel);
             }
             return NotFound();
 
-
         }
+
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody]Hotel hotel)
+        public IActionResult CreateHotel([FromBody]Hotel hotel)
         {
-            var CreatedHotel = await _hotelService.CreateHotel(hotel);
-            return CreatedAtAction("Get", new {id  = CreatedHotel.Id}, CreatedHotel);
+            _hotelService.TInsert(hotel);
+             return Ok();
+
 
         }
+
         [HttpPut]
-        public async Task<IActionResult> Put([FromBody] Hotel hotel)
+        public IActionResult Put([FromBody] Hotel hotel)
         {
-            if (await _hotelService.GetHotelById(hotel.Id) != null)
+        
+            if ( _hotelService.TGetById(hotel.Id) != null)
             {
-                return Ok(await _hotelService.UpdateHotel(hotel));
-            }
-            return NotFound();
-
-        }
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
-        {
-            if (await _hotelService.GetHotelById(id) != null)
-            {
-                await _hotelService.DeleteHotelById(id);
+                _hotelService.TUpdate(hotel);
                 return Ok();
             }
             return NotFound();
-           
 
         }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            if ( _hotelService.TGetById(id) != null)
+            {
+                _hotelService.TDelete(id);
+                return Ok();
+            }
+            return NotFound();
+
+
+        }
+
     }
 }

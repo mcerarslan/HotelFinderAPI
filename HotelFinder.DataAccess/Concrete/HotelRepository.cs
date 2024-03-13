@@ -9,62 +9,16 @@ using System.Threading.Tasks;
 
 namespace HotelFinder.DataAccess.Concrete
 {
-    public class HotelRepository : IHotelRepository
+    public class HotelRepository : Repository<Hotel>, IHotelRepository
     {
-        public async Task<Hotel> CreateHotel(Hotel hotel)
+        public HotelRepository(HotelDbContext context) : base(context)
         {
-            using (var hotelDbContext = new HotelDbContext())
-            {
-               hotelDbContext.Hotels.Add(hotel);
-                await hotelDbContext.SaveChangesAsync();
-               return hotel;
-
-            }
         }
 
-        public async Task DeleteHotelById(int id)
+        public IEnumerable<Hotel> GetByName(string name)
         {
-            using (var hotelDbContext = new HotelDbContext())
-            {
-               var deletedHotel = await GetHotelById(id);
-               hotelDbContext.Hotels.Remove(deletedHotel);
-               await hotelDbContext.SaveChangesAsync();
-            }
-        }
-
-        public async Task<Hotel> GetHotelById(int id)
-        {
-            using (var hotelDbContext = new HotelDbContext())
-            {
-                return await hotelDbContext.Hotels.FindAsync(id);
-            }
-        }
-
-        public async Task<Hotel> GetHotelByName(string name)
-        {
-            using (var hotelDbContext = new HotelDbContext())
-            {
-                return await hotelDbContext.Hotels.FirstOrDefaultAsync(u => u.Name.ToLower()==name.ToLower());
-            }
-        
-        }
-
-        public async Task<List<Hotel>> GetHotels()
-        {
-            using (var hotelDbContext = new HotelDbContext())
-            {
-                return await hotelDbContext.Hotels.ToListAsync();
-            }
-        }
-
-        public async Task<Hotel> UpdateHotel(Hotel hotel)
-        {
-            using (var hotelDbContext = new HotelDbContext())
-            {
-                hotelDbContext.Hotels.Update(hotel);
-                await hotelDbContext.SaveChangesAsync();
-                return hotel;
-            }
+   
+            return _context.Set<Hotel>().Where(u => u.Name.Replace(" ","").ToLower().Contains(name.Replace(" ", "").ToLower())).ToList();
         }
     }
 }
