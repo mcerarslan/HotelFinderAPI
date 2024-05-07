@@ -14,11 +14,5 @@ namespace HotelFinder.DataAccess.Concrete
         public HotelRepository(HotelDbContext context) : base(context)
         {
         }
-
-        public IEnumerable<Hotel> GetByName(string name)
-        {
-   
-            return _context.Set<Hotel>().Where(u => u.Name.Replace(" ","").ToLower().Contains(name.Replace(" ", "").ToLower())).ToList();
-        }
     }
 }

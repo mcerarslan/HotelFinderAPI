@@ -39,18 +39,30 @@ namespace HotelFinder.API.Controllers
         }
 
         [HttpGet]
-        [Route("[action]/{name}")]
-        public  IActionResult GetHotelByName(string name)
+        [Route("[action]")]
+        public IActionResult GetHotelByNameAndCity(string name, string city)
         {
-            var hotel = _hotelService.TGetByName(name);
-            if(hotel != null)
-            {
-                return Ok(hotel);
-            }
-            return NotFound();
 
+            var hotels = _hotelService.TGet(new List<Expression<Func<Hotel, bool>>>
+            {
+                 h => h.Name == name && h.City == city
+            }).ToList();
+            return Ok(hotels);
         }
-      
+
+
+        [HttpGet]
+        [Route("[action]/{city}")]
+        public IActionResult GetHotelByCity(string city)
+        {
+          
+            var hotels = _hotelService.TGet(new List<Expression<Func<Hotel,bool>>>
+            {
+                h => h.City.StartsWith(city)
+            });
+            return Ok(hotels);
+        }
+
         [HttpPost]
         public IActionResult CreateHotel([FromBody]Hotel hotel)
         {

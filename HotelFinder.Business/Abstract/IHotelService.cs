@@ -9,6 +9,5 @@ namespace HotelFinder.Business.Abstract
 {
     public interface IHotelService : IRepositoryServices<Hotel>
     {
-        IEnumerable<Hotel> TGetByName(string name);
     }
 }

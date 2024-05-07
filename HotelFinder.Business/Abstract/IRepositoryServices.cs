@@ -12,7 +12,7 @@ namespace HotelFinder.Business.Abstract
         IEnumerable<T> TGetAll();
 
         T TGetById(int id);
-     
+        IQueryable<T> TGet(List<Expression<Func<T, bool>>> predicate);
 
         T TInsert(T entity);
 

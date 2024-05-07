@@ -13,6 +13,7 @@ namespace HotelFinder.DataAccess.Abstract
 
         T GetById(int id);
 
+        IQueryable<T> Get(List<Expression<Func<T, bool>>> predicate);
 
         void Insert(T entity);
 

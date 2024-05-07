@@ -26,7 +26,13 @@ namespace HotelFinder.DataAccess.Concrete
             _context.SaveChanges();
         }
 
-       
+        public IQueryable<T> Get(List<Expression<Func<T, bool>>> predicates)
+        {
+            IQueryable<T> query = _dbSet.AsNoTracking().AsQueryable(); 
+
+            query = predicates.Aggregate(query, (current, predicate) => current.Where(predicate));
+            return query;
+        }
 
         public IEnumerable<T> GetAll()
         {

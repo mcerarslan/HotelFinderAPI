@@ -10,6 +10,5 @@ namespace HotelFinder.DataAccess.Abstract
 {
     public interface IHotelRepository: IRepository<Hotel>
     {
-        IEnumerable<Hotel> GetByName(string name);
     }
 }

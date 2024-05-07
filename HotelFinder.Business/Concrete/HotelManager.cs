@@ -21,11 +21,6 @@ namespace HotelFinder.Business.Concrete
 
         }
 
-        public IEnumerable<Hotel> TGetByName(string name)
-        {
-            return _hotelRepository.GetByName(name);
-        }
-
         public void TDelete(int id)
         {
             _hotelRepository.Delete(id);
@@ -62,6 +57,9 @@ namespace HotelFinder.Business.Concrete
             throw new NotImplementedException();
         }
 
-       
+        public IQueryable<Hotel> TGet(List<Expression<Func<Hotel, bool>>> predicate)
+        {
+            return _hotelRepository.Get(predicate);
+        }
     }
 }
